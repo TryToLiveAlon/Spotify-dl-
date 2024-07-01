@@ -72,7 +72,7 @@ const getSecondDownloadLink = async (query) => {
 
 // Function to get third download link from external API
 const getThirdDownloadLink = async (query) => {
-  const apiUrl = `https://yagami-kira.000webhostapp.com/spotify.php?text=${encodeURIComponent(query)}`;
+  const apiUrl = `https://yagami-kira.000webhostapp.com/zawspotify.php?text=${encodeURIComponent(query)}`;
 
   try {
     const response = await axios.get(apiUrl);
