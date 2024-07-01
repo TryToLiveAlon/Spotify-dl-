@@ -66,7 +66,7 @@ const getSecondDownloadLink = async (query) => {
     return response.data.download_link;
   } catch (error) {
     console.error('Failed to get second download link', error.response.data);
-    throw error;
+    throw new Error(`Error in making second link: ${error.message}`);
   }
 };
 
@@ -80,7 +80,7 @@ const getThirdDownloadLink = async (query) => {
     return firstResult.url;
   } catch (error) {
     console.error('Failed to get third download link', error.response.data);
-    throw error;
+    throw new Error(`Error in making third link: ${error.message}`);
   }
 };
 
@@ -105,10 +105,20 @@ module.exports = async (req, res) => {
       const { duration, audio, image, download_url } = spotifyDetails.preview;
 
       // Fetching second download link
-      const secondDownloadLink = await getSecondDownloadLink(query);
+      let secondDownloadLink;
+      try {
+        secondDownloadLink = await getSecondDownloadLink(query);
+      } catch (error) {
+        secondDownloadLink = `Error in making second link: ${error.message}`;
+      }
 
       // Fetching third download link
-      const thirdDownloadLink = await getThirdDownloadLink(query);
+      let thirdDownloadLink;
+      try {
+        thirdDownloadLink = await getThirdDownloadLink(query);
+      } catch (error) {
+        thirdDownloadLink = `Error in making third link: ${error.message}`;
+      }
 
       return res.status(200).json({
         trackName: track.name,
@@ -118,9 +128,9 @@ module.exports = async (req, res) => {
         duration, // Adding duration to the JSON response
         audio, // Adding audio link to the JSON response
         image, // Adding image link to the JSON response
-        download_urlv1: `https://hello-eordh.uk325346.workers.dev/?url=${encodeURIComponent(spotifyUrl)}`, // Adding download URL to the JSON response
-        download_urlv2: secondDownloadLink, // Adding second download link to the JSON response
-        download_urlv3: thirdDownloadLink, // Adding third download link to the JSON response
+        download_url: `https://hello-eordh.uk325346.workers.dev/?url=${encodeURIComponent(spotifyUrl)}`, // Adding download URL to the JSON response
+        second_downloadlink2: secondDownloadLink, // Adding second download link or error message to the JSON response
+        third_downloadlink: thirdDownloadLink, // Adding third download link or error message to the JSON response
         developerCredit: 'https://t.me/TryToLiveAlon' // Developer credit URL
       });
     } else {
