@@ -1,0 +1,12 @@
+{
+  "name": "spotify-search",
+  "version": "1.0.0",
+  "description": "A Node.js application to search for Spotify tracks using the Spotify API",
+  "main": "api/search.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
